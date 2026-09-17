@@ -5,8 +5,9 @@
       "**",
       "!**/node_modules",
       "!**/dist",
-      "!src/components/ui/**",
-      "!package-lock.json"
+      "!**/prisma/migrations",
+      "!**/package-lock.json",
+      "!**/components/ui/**"
     ]
   },
   "formatter": {
