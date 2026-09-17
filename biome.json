@@ -7,7 +7,9 @@
       "!**/dist",
       "!**/prisma/migrations",
       "!**/package-lock.json",
-      "!**/components/ui/**"
+      "!**/components/ui/**",
+      "!**/assets/**",
+      "!**/public/**"
     ]
   },
   "formatter": {
