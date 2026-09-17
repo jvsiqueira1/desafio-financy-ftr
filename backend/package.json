@@ -14,10 +14,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/express5": "^1.1.2",
     "@prisma/client": "^6.19.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "graphql": "^16.14.2",
     "zod": "^4.6.5"
   },
   "devDependencies": {
