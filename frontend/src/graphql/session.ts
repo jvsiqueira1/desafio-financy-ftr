@@ -31,3 +31,42 @@ export const ME_QUERY = gql`
 export interface MeQueryData {
   me: AuthenticatedUser
 }
+
+export interface AuthPayload {
+  token: string
+  user: AuthenticatedUser
+}
+
+export const SIGN_IN_MUTATION = gql`
+  mutation SignIn($input: SignInInput!) {
+    signIn(input: $input) {
+      token
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+`
+
+export interface SignInMutationData {
+  signIn: AuthPayload
+}
+
+export const SIGN_UP_MUTATION = gql`
+  mutation SignUp($input: SignUpInput!) {
+    signUp(input: $input) {
+      token
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+`
+
+export interface SignUpMutationData {
+  signUp: AuthPayload
+}

@@ -1,19 +1,19 @@
 import { ApolloProvider } from '@apollo/client/react'
 
+import { AuthProvider } from '@/features/auth/auth-provider'
 import { apolloClient } from '@/lib/apollo'
 import { AppRoutes } from '@/routes/app-routes'
 
 /**
- * Raiz da aplicacao.
- *
- * O ApolloProvider disponibiliza o cliente para toda a arvore via contexto do
- * React: qualquer componente abaixo pode usar useQuery e useMutation sem
- * receber o cliente por prop.
+ * A ordem dos provedores importa: o AuthProvider usa hooks do Apollo,
+ * entao precisa estar dentro do ApolloProvider.
  */
 export function App() {
   return (
     <ApolloProvider client={apolloClient}>
-      <AppRoutes />
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </ApolloProvider>
   )
 }
