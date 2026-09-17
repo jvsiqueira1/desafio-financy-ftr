@@ -1,11 +1,19 @@
+import { ApolloProvider } from '@apollo/client/react'
+
+import { apolloClient } from '@/lib/apollo'
 import { AppRoutes } from '@/routes/app-routes'
 
 /**
  * Raiz da aplicacao.
  *
- * Os providers (Apollo Client, sessao do usuario) entram aqui, envolvendo as
- * rotas. Hoje o componente so repassa, mas e o lugar onde esse contexto nasce.
+ * O ApolloProvider disponibiliza o cliente para toda a arvore via contexto do
+ * React: qualquer componente abaixo pode usar useQuery e useMutation sem
+ * receber o cliente por prop.
  */
 export function App() {
-  return <AppRoutes />
+  return (
+    <ApolloProvider client={apolloClient}>
+      <AppRoutes />
+    </ApolloProvider>
+  )
 }
