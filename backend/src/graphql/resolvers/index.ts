@@ -1,30 +1,16 @@
-import type { GraphQLContext } from '../context.js'
+import { baseResolvers } from './base.js'
+import { userResolvers } from './user.js'
 
 /**
- * Implementacao de cada campo declarado no schema.
- *
- * A assinatura de um resolver e sempre (parent, args, context, info):
- *   parent  - resultado do resolver do nivel acima
- *   args    - argumentos recebidos no campo
- *   context - objeto criado por requisicao (banco, usuario autenticado...)
- *   info    - metadados da consulta, raramente necessario
- *
- * Argumentos nao utilizados sao prefixados com _ por convencao.
+ * Os resolvers de cada modulo sao combinados por tipo raiz.
+ * Novos modulos entram somando suas chaves de Query e Mutation.
  */
 export const resolvers = {
   Query: {
-    hello: (): string => 'Financy API no ar',
-
-    usersCount: (
-      _parent: unknown,
-      _args: unknown,
-      context: GraphQLContext,
-    ): Promise<number> => context.prisma.user.count(),
+    ...baseResolvers.Query,
+    ...userResolvers.Query,
   },
-
   Mutation: {
-    // Temporario: substituido por signUp/signIn na etapa de autenticacao.
-    echo: (_parent: unknown, args: { message: string }): string =>
-      `voce disse: ${args.message}`,
+    ...userResolvers.Mutation,
   },
 }
