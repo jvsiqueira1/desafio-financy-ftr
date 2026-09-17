@@ -1,8 +1,8 @@
 import {
+  type AuthenticatedUserData,
+  type AuthResult,
   signIn,
   signUp,
-  type AuthResult,
-  type AuthenticatedUserData,
 } from '../../modules/auth/auth.service.js'
 import { requireAuthentication } from '../../modules/auth/require-authentication.js'
 import type { GraphQLContext } from '../context.js'

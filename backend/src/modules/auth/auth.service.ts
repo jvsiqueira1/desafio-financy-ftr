@@ -1,13 +1,10 @@
 import type { PrismaClient } from '@prisma/client'
 import argon2 from 'argon2'
 import { z } from 'zod'
-
-import {
-  conflict,
-  invalidCredentials,
-  invalidInput,
-} from '../../lib/errors.js'
+import { conflict, invalidCredentials, invalidInput } from '../../lib/errors.js'
 import { signToken } from '../../lib/jwt.js'
+import { isPrismaError } from '../../lib/prisma-error.js'
+import { toFieldErrors } from '../../lib/validations.js'
 
 /**
  * Hash valido de uma senha que ninguem conhece.
@@ -25,19 +22,19 @@ const emailSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .pipe(z.email({ error: 'Informe um e-mail valido' }))
+  .pipe(z.email({ error: 'Informe um e-mail válido' }))
 
 const signUpSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(3, 'O nome deve ter no minimo 3 caracteres')
-    .max(120, 'O nome deve ter no maximo 120 caracteres'),
+    .min(3, 'O nome deve ter no mínimo 3 caracteres')
+    .max(120, 'O nome deve ter no máximo 120 caracteres'),
   email: emailSchema,
   password: z
     .string()
-    .min(8, 'A senha deve ter no minimo 8 caracteres')
-    .max(72, 'A senha deve ter no maximo 72 caracteres'),
+    .min(8, 'A senha deve ter no mínimo 8 caracteres')
+    .max(72, 'A senha deve ter no máximo 72 caracteres'),
 })
 
 const signInSchema = z.object({
@@ -56,18 +53,6 @@ export interface AuthResult {
   user: AuthenticatedUserData
 }
 
-/** Converte as falhas do zod no formato { campo: [mensagens] }. */
-function toFieldErrors(error: z.ZodError): Record<string, string[]> {
-  const fields: Record<string, string[]> = {}
-
-  for (const issue of error.issues) {
-    const field = issue.path.join('.') || '_'
-    fields[field] = [...(fields[field] ?? []), issue.message]
-  }
-
-  return fields
-}
-
 export async function signUp(
   prisma: PrismaClient,
   input: unknown,
@@ -75,7 +60,7 @@ export async function signUp(
   const parsed = signUpSchema.safeParse(input)
 
   if (!parsed.success) {
-    throw invalidInput('Dados invalidos', toFieldErrors(parsed.error))
+    throw invalidInput('Dados inválidos', toFieldErrors(parsed.error))
   }
 
   const { name, email, password } = parsed.data
@@ -83,7 +68,7 @@ export async function signUp(
   const alreadyRegistered = await prisma.user.findUnique({ where: { email } })
 
   if (alreadyRegistered) {
-    throw conflict('Este e-mail ja esta cadastrado')
+    throw conflict('Este e-mail já está cadastrado')
   }
 
   // A senha nunca e armazenada: guardamos o hash, que e um caminho so.
@@ -98,16 +83,8 @@ export async function signUp(
 
     return { token: signToken(user.id), user }
   } catch (error) {
-    // A verificacao acima resolve o caso comum, mas duas requisicoes
-    // simultaneas com o mesmo e-mail podem passar por ela. A constraint unica
-    // do banco e a garantia real, e P2002 e como ela se manifesta.
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      error.code === 'P2002'
-    ) {
-      throw conflict('Este e-mail ja esta cadastrado')
+    if (isPrismaError(error, 'P2002')) {
+      throw conflict('Este e-mail já está cadastrado')
     }
 
     throw error

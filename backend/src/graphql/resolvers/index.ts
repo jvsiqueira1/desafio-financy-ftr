@@ -1,4 +1,5 @@
 import { baseResolvers } from './base.js'
+import { categoryResolvers } from './category.js'
 import { userResolvers } from './user.js'
 
 /**
@@ -9,8 +10,10 @@ export const resolvers = {
   Query: {
     ...baseResolvers.Query,
     ...userResolvers.Query,
+    ...categoryResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,
+    ...categoryResolvers.Mutation,
   },
 }

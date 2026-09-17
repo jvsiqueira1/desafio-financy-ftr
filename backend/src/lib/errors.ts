@@ -30,7 +30,7 @@ export function conflict(message: string) {
 }
 
 /** Falta token, ou o token e invalido/expirado. */
-export function unauthenticated(message = 'Autenticacao necessaria') {
+export function unauthenticated(message = 'Autenticação necessária') {
   return new GraphQLError(message, {
     extensions: { code: 'UNAUTHENTICATED' },
   })
@@ -43,7 +43,19 @@ export function unauthenticated(message = 'Autenticacao necessaria') {
  * quais e-mails estao cadastrados, permitindo enumerar usuarios.
  */
 export function invalidCredentials() {
-  return new GraphQLError('E-mail ou senha invalidos', {
+  return new GraphQLError('E-mail ou senha inválidos', {
     extensions: { code: 'INVALID_CREDENTIALS' },
+  })
+}
+
+/**
+ * Recurso inexistente — ou existente, porem de outro dono.
+ *
+ * Responder "sem permissao" confirmaria que aquele id existe, entregando
+ * informacao a quem esta sondando. "Nao encontrado" nao entrega nada.
+ */
+export function notFound(message: string) {
+  return new GraphQLError(message, {
+    extensions: { code: 'NOT_FOUND' },
   })
 }
