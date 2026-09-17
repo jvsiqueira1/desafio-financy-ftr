@@ -1,0 +1,41 @@
+# Dependencias
+**/node_modules/
+.pnpm-store/
+
+# Build
+**/dist/
+**/build/
+**/.vite/
+
+# Variaveis de ambiente (NUNCA commitar)
+.env
+.env.*
+!.env.example
+
+# Banco de dados local (SQLite)
+**/*.db
+**/*.db-journal
+**/*.sqlite
+**/*.sqlite3
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# Cache e ferramentas
+.cache/
+coverage/
+*.tsbuildinfo
+.eslintcache
+
+# Sistema operacional
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
