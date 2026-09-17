@@ -1,0 +1,88 @@
+// Documentacao: https://pris.ly/d/prisma-schema
+
+// Gera o Prisma Client: o cliente tipado que o codigo usa para consultar o banco.
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define QUAL banco e COMO chegar nele.
+// A url vem de variavel de ambiente para nao deixar credencial no repositorio.
+// Em SQLite o caminho e relativo a este arquivo, entao "file:./dev.db"
+// cria o banco em prisma/dev.db
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// ENUMS
+// ---------------------------------------------------------------------------
+
+/// Natureza da transação. No Figma aparece como "Receita/Despesa" no modal
+/// e "Entrada/Saida" na tabela: o banco guarda um só
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+// ---------------------------------------------------------------------------
+// MODELS
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String @id @default(uuid())
+  name         String
+  email        String @unique
+  passwordHash String @map("password_hash")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  categories   Category[]
+  transactions Transaction[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  icon        String
+  color       String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+
+  @@unique([userId, title])
+  @@index([userId])
+  @@map("categories")
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  description String
+  /// Valor em CENTAVOS. R$ 123,45 e gravado como 12345.
+  amount      Int
+  type        TransactionType
+  date        DateTime
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId String   @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([userId, date])
+  @@map("transactions")
+}
