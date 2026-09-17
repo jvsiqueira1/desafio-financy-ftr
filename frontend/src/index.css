@@ -96,7 +96,7 @@
 
   /* Conteudo de apoio: rotulos e textos auxiliares. */
   --muted: #f8f9fa;
-  --muted-foreground: #6b7280; /* Grayscale/gray-500 */
+  --muted-foreground: #4b5563; /* Grayscale/gray-600 */
 
   /* Realce sutil, usado em estados de hover. Derivado: o Figma nao
      especifica esse estado. */
