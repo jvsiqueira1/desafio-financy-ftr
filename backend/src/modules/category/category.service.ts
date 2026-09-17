@@ -64,7 +64,7 @@ const updateCategorySchema = z.object({
  * `_count` traz a quantidade de transacoes na mesma consulta. Contar em um
  * resolver de campo geraria uma consulta por categoria (problema N+1).
  */
-const categorySelect = {
+export const categorySelect = {
   id: true,
   title: true,
   description: true,
@@ -82,7 +82,7 @@ interface CategoryRow {
   _count: { transactions: number }
 }
 
-function toCategory(category: CategoryRow) {
+export function toCategory(category: CategoryRow) {
   return {
     id: category.id,
     title: category.title,
