@@ -5,6 +5,7 @@ import {
   signUp,
 } from '../../modules/auth/auth.service.js'
 import { requireAuthentication } from '../../modules/auth/require-authentication.js'
+import { updateProfile } from '../../modules/user/user.service.js'
 import type { GraphQLContext } from '../context.js'
 
 /**
@@ -33,5 +34,15 @@ export const userResolvers = {
       args: { input: unknown },
       context: GraphQLContext,
     ): Promise<AuthResult> => signIn(context.prisma, args.input),
+
+    updateProfile: (
+      _parent: unknown,
+      args: { input: unknown },
+      context: GraphQLContext,
+    ) => {
+      const user = requireAuthentication(context)
+
+      return updateProfile(context.prisma, user.id, args.input)
+    },
   },
 }
