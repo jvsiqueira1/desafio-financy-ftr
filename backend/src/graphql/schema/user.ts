@@ -25,6 +25,10 @@ export const userTypeDefs = `#graphql
     password: String!
   }
 
+  input UpdateProfileInput {
+    name: String!
+  }
+
   extend type Query {
     """Usuario da sessao atual. Exige token valido."""
     me: User!
@@ -36,5 +40,8 @@ export const userTypeDefs = `#graphql
 
     """Autentica com e-mail e senha."""
     signIn(input: SignInInput!): AuthPayload!
+
+    """Atualiza o nome do usuário autenticado. Devolve o perfil atualizado."""
+    updateProfile(input: UpdateProfileInput!): User!
   }
 `
