@@ -10,12 +10,10 @@ import {
 import {
   type AuthenticatedUser,
   ME_QUERY,
-  type MeQueryData,
   SIGN_IN_MUTATION,
   SIGN_UP_MUTATION,
-  type SignInMutationData,
-  type SignUpMutationData,
 } from '@/graphql/session'
+
 import {
   clearStoredToken,
   getStoredToken,
@@ -39,10 +37,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => getStoredToken())
 
   // Com token, pergunta a API quem e o usuario. Sem token, nem consulta.
-  const { data, loading } = useQuery<MeQueryData>(ME_QUERY, { skip: !token })
+  const { data, loading } = useQuery(ME_QUERY, { skip: !token })
 
-  const [executarSignIn] = useMutation<SignInMutationData>(SIGN_IN_MUTATION)
-  const [executarSignUp] = useMutation<SignUpMutationData>(SIGN_UP_MUTATION)
+  const [executarSignIn] = useMutation(SIGN_IN_MUTATION)
+  const [executarSignUp] = useMutation(SIGN_UP_MUTATION)
 
   useEffect(() => {
     // Encerra a sessao quando a camada de rede avisa que o token foi recusado.

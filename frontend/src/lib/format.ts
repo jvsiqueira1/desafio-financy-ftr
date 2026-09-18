@@ -74,3 +74,8 @@ export function getInitials(name: string): string {
 
   return (primeira + ultima).toUpperCase()
 }
+
+/** "0 itens", "1 item", "12 itens". */
+export function formatItemCount(total: number): string {
+  return total === 1 ? '1 item' : `${total} itens`
+}

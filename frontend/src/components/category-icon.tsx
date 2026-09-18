@@ -12,7 +12,7 @@ interface CategoryIconProps {
 
 /** Quadro arredondado de 40px com o icone da categoria na cor dela. */
 export function CategoryIcon({ icon, color, className }: CategoryIconProps) {
-  const { soft } = getCategoryAppearance(color)
+  const { soft, text } = getCategoryAppearance(color)
   const Icone = getCategoryIcon(icon)
 
   return (
@@ -20,6 +20,7 @@ export function CategoryIcon({ icon, color, className }: CategoryIconProps) {
       className={cn(
         'inline-flex size-10 shrink-0 items-center justify-center rounded-lg',
         soft,
+        text,
         className,
       )}
     >
