@@ -54,14 +54,44 @@ export function getCategoryIcon(icon: string): LucideIcon {
   return CATEGORY_ICONS[icon as CategoryIconName] ?? Ticket
 }
 
+/**
+ * Nomes legiveis dos icones, usados como rotulo acessivel no seletor.
+ * Sem isto, o leitor de tela anunciaria "briefcase-business".
+ */
+export const CATEGORY_ICON_LABELS: Record<CategoryIconName, string> = {
+  'briefcase-business': 'Maleta',
+  'car-front': 'Carro',
+  'heart-pulse': 'Saúde',
+  'piggy-bank': 'Cofrinho',
+  'shopping-cart': 'Carrinho de compras',
+  ticket: 'Ingresso',
+  'tool-case': 'Caixa de ferramentas',
+  utensils: 'Talheres',
+  'paw-print': 'Pata',
+  house: 'Casa',
+  gift: 'Presente',
+  dumbbell: 'Haltere',
+  'book-open': 'Livro',
+  'baggage-claim': 'Bagagem',
+  mailbox: 'Caixa de correio',
+  'receipt-text': 'Recibo',
+}
+
+/**
+ * Cada cor do seletor aparece em tres tons no layout:
+ *   base   - o icone da categoria
+ *   soft   - fundo claro do chip e do quadro do icone
+ *   strong - o nome dentro do chip, escuro para contrastar com o fundo
+ */
 export interface CategoryAppearance {
   /** Valor gravado no banco; precisa bater com a lista aceita pela API. */
   value: string
   label: string
   /** Amostra solida, usada no seletor de cor. */
   swatch: string
-  /** Fundo claro com texto escuro, usado no chip e no quadro do icone. */
+  text: string
   soft: string
+  strong: string
 }
 
 /**
@@ -76,43 +106,57 @@ export const CATEGORY_COLORS: CategoryAppearance[] = [
     value: '#16A34A',
     label: 'Verde',
     swatch: 'bg-category-green',
-    soft: 'bg-category-green-soft text-category-green-strong',
+    text: 'text-category-green',
+    soft: 'bg-category-green-soft',
+    strong: 'text-category-green-strong',
   },
   {
     value: '#2563EB',
     label: 'Azul',
     swatch: 'bg-category-blue',
-    soft: 'bg-category-blue-soft text-category-blue-strong',
+    text: 'text-category-blue',
+    soft: 'bg-category-blue-soft',
+    strong: 'text-category-blue-strong',
   },
   {
     value: '#9333EA',
     label: 'Roxo',
     swatch: 'bg-category-purple',
-    soft: 'bg-category-purple-soft text-category-purple-strong',
+    text: 'text-category-purple',
+    soft: 'bg-category-purple-soft',
+    strong: 'text-category-purple-strong',
   },
   {
     value: '#DB2777',
     label: 'Rosa',
     swatch: 'bg-category-pink',
-    soft: 'bg-category-pink-soft text-category-pink-strong',
+    text: 'text-category-pink',
+    soft: 'bg-category-pink-soft',
+    strong: 'text-category-pink-strong',
   },
   {
     value: '#DC2626',
     label: 'Vermelho',
     swatch: 'bg-category-red',
-    soft: 'bg-category-red-soft text-category-red-strong',
+    text: 'text-category-red',
+    soft: 'bg-category-red-soft',
+    strong: 'text-category-red-strong',
   },
   {
     value: '#EA580C',
     label: 'Laranja',
     swatch: 'bg-category-orange',
-    soft: 'bg-category-orange-soft text-category-orange-strong',
+    text: 'text-category-orange',
+    soft: 'bg-category-orange-soft',
+    strong: 'text-category-orange-strong',
   },
   {
     value: '#CA8A04',
     label: 'Amarelo',
     swatch: 'bg-category-yellow',
-    soft: 'bg-category-yellow-soft text-category-yellow-strong',
+    text: 'text-category-yellow',
+    soft: 'bg-category-yellow-soft',
+    strong: 'text-category-yellow-strong',
   },
 ]
 
