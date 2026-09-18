@@ -1,23 +1,46 @@
 import { useQuery } from '@apollo/client/react'
-import { ArrowUpDown, SearchX } from 'lucide-react'
-import { useEffect } from 'react'
+import { ArrowUpDown, Plus, SearchX } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 import { EmptyState } from '@/components/empty-state'
 import { PageHeader } from '@/components/page-header'
 import { PageShell } from '@/components/page-shell'
 import { Pagination } from '@/components/pagination'
 import { Button } from '@/components/ui/button'
+import { DeleteTransactionDialog } from '@/features/transactions/delete-transaction-dialog'
 import { parsePeriod } from '@/features/transactions/period-options'
 import { TransactionFilters } from '@/features/transactions/transaction-filters'
+import { TransactionFormDialog } from '@/features/transactions/transaction-form-dialog'
 import { TransactionsTable } from '@/features/transactions/transactions-table'
 import { useTransactionFilters } from '@/features/transactions/use-transaction-filters'
-import { TRANSACTIONS_QUERY } from '@/graphql/transactions'
+import { TRANSACTIONS_QUERY, type Transaction } from '@/graphql/transactions'
 
 const ITENS_POR_PAGINA = 10
 
 export function TransactionsPage() {
   const { filters, update, hasActiveFilters } = useTransactionFilters()
   const periodo = parsePeriod(filters.period)
+
+  const [formularioAberto, setFormularioAberto] = useState(false)
+  const [emEdicao, setEmEdicao] = useState<Transaction | null>(null)
+  const [paraExcluir, setParaExcluir] = useState<Transaction | null>(null)
+
+  function abrirCriacao() {
+    setEmEdicao(null)
+    setFormularioAberto(true)
+  }
+
+  function abrirEdicao(transacao: Transaction) {
+    setEmEdicao(transacao)
+    setFormularioAberto(true)
+  }
+
+  const botaoNova = (
+    <Button onClick={abrirCriacao} size="md" type="button">
+      <Plus aria-hidden />
+      Nova transação
+    </Button>
+  )
 
   const { data, previousData, loading, error, refetch } = useQuery(
     TRANSACTIONS_QUERY,
@@ -57,6 +80,7 @@ export function TransactionsPage() {
     <PageShell>
       <div className="space-y-8">
         <PageHeader
+          action={botaoNova}
           description="Gerencie todas as suas transações financeiras"
           title="Transações"
         />
@@ -113,6 +137,7 @@ export function TransactionsPage() {
               />
             ) : (
               <EmptyState
+                action={botaoNova}
                 description="Registre a primeira para começar a acompanhar suas finanças."
                 icon={ArrowUpDown}
                 title="Nenhuma transação ainda"
@@ -121,7 +146,11 @@ export function TransactionsPage() {
 
           {resultado && resultado.total > 0 && (
             <>
-              <TransactionsTable transactions={resultado.items} />
+              <TransactionsTable
+                onDelete={setParaExcluir}
+                onEdit={abrirEdicao}
+                transactions={resultado.items}
+              />
               <div className="border-border border-t">
                 <Pagination
                   onPageChange={(pagina) => update({ page: pagina })}
@@ -135,6 +164,17 @@ export function TransactionsPage() {
           )}
         </section>
       </div>
+
+      <TransactionFormDialog
+        onOpenChange={setFormularioAberto}
+        open={formularioAberto}
+        transaction={emEdicao}
+      />
+
+      <DeleteTransactionDialog
+        onClose={() => setParaExcluir(null)}
+        transaction={paraExcluir}
+      />
     </PageShell>
   )
 }
