@@ -1,5 +1,7 @@
+import { SquarePen, Trash } from 'lucide-react'
 import { CategoryIcon } from '@/components/category-icon'
 import { CategoryTag } from '@/components/category-tag'
+import { Button } from '@/components/ui/button'
 import type { Transaction } from '@/graphql/transactions'
 import { formatDate, formatSignedCurrency } from '@/lib/format'
 
@@ -7,6 +9,8 @@ import { TransactionTypeLabel } from './transaction-type-label'
 
 interface TransactionsTableProps {
   transactions: Transaction[]
+  onEdit: (transaction: Transaction) => void
+  onDelete: (transaction: Transaction) => void
 }
 
 const CABECALHO =
@@ -16,7 +20,11 @@ const CABECALHO =
  * Tabela de verdade, e nao divs: o leitor de tela anuncia "linha 3, coluna
  * Valor", o que um amontoado de divs nao permite.
  */
-export function TransactionsTable({ transactions }: TransactionsTableProps) {
+export function TransactionsTable({
+  transactions,
+  onEdit,
+  onDelete,
+}: TransactionsTableProps) {
   return (
     <table className="w-full table-fixed">
       {/* Larguras medidas no layout: 112, 200, 136, 200 e 120px. A descricao
@@ -86,7 +94,28 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
               {formatSignedCurrency(transacao.amountInCents, transacao.type)}
             </td>
             {/* As acoes de editar e excluir entram junto com o modal. */}
-            <td className="px-6" />
+            <td className="px-6">
+              <div className="flex items-center justify-center gap-2">
+                <Button
+                  aria-label={`Excluir ${transacao.description}`}
+                  onClick={() => onDelete(transacao)}
+                  size="icon"
+                  type="button"
+                  variant="outline"
+                >
+                  <Trash aria-hidden className="text-red-500" />
+                </Button>
+                <Button
+                  aria-label={`Editar ${transacao.description}`}
+                  onClick={() => onEdit(transacao)}
+                  size="icon"
+                  type="button"
+                  variant="outline"
+                >
+                  <SquarePen aria-hidden className="text-gray-700" />
+                </Button>
+              </div>
+            </td>
           </tr>
         ))}
       </tbody>

@@ -17,6 +17,13 @@ const formatadorData = new Intl.DateTimeFormat('pt-BR', {
   timeZone: 'UTC',
 })
 
+const formatadorDataCompleta = new Intl.DateTimeFormat('pt-BR', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  timeZone: 'UTC',
+})
+
 /** Converte centavos em moeda: 12345 -> "R$ 123,45". */
 export function formatCurrency(amountInCents: number): string {
   return formatadorMoeda.format(amountInCents / 100)
@@ -78,4 +85,9 @@ export function getInitials(name: string): string {
 /** "0 itens", "1 item", "12 itens". */
 export function formatItemCount(total: number): string {
   return total === 1 ? '1 item' : `${total} itens`
+}
+
+/** "30/11/2025" — usada no campo de data, onde o ano completo evita duvida. */
+export function formatFullDate(isoDate: string): string {
+  return formatadorDataCompleta.format(new Date(isoDate))
 }

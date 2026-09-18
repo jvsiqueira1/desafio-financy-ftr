@@ -80,3 +80,45 @@ export const TRANSACTIONS_QUERY: TypedDocumentNode<
   }
   ${TRANSACTION_FIELDS}
 `
+
+export interface TransactionInput {
+  description: string
+  amountInCents: number
+  type: TransactionType
+  /** ISO-8601 a meia-noite UTC. */
+  date: string
+  categoryId: string
+}
+
+export const CREATE_TRANSACTION_MUTATION: TypedDocumentNode<
+  { createTransaction: Transaction },
+  { input: TransactionInput }
+> = gql`
+  mutation CreateTransaction($input: CreateTransactionInput!) {
+    createTransaction(input: $input) {
+      ...TransactionFields
+    }
+  }
+  ${TRANSACTION_FIELDS}
+`
+
+export const UPDATE_TRANSACTION_MUTATION: TypedDocumentNode<
+  { updateTransaction: Transaction },
+  { input: Partial<TransactionInput> & { id: string } }
+> = gql`
+  mutation UpdateTransaction($input: UpdateTransactionInput!) {
+    updateTransaction(input: $input) {
+      ...TransactionFields
+    }
+  }
+  ${TRANSACTION_FIELDS}
+`
+
+export const DELETE_TRANSACTION_MUTATION: TypedDocumentNode<
+  { deleteTransaction: boolean },
+  { id: string }
+> = gql`
+  mutation DeleteTransaction($id: ID!) {
+    deleteTransaction(id: $id)
+  }
+`
