@@ -73,12 +73,18 @@ interface TransactionFormDialogProps {
   onOpenChange: (open: boolean) => void
   /** Transacao em edicao. Null ao criar. */
   transaction: Transaction | null
+  /**
+   * Chamado depois de salvar, antes de fechar. Quem abre o modal usa isto para
+   * atualizar o que so a sua tela exibe — o modal nao precisa conhecer as telas.
+   */
+  onSaved?: () => unknown
 }
 
 export function TransactionFormDialog({
   open,
   onOpenChange,
   transaction,
+  onSaved,
 }: TransactionFormDialogProps) {
   const editando = transaction !== null
   const { data } = useQuery(CATEGORIES_QUERY)
@@ -142,6 +148,7 @@ export function TransactionFormDialog({
         toast.success('Transação criada')
       }
 
+      await onSaved?.()
       onOpenChange(false)
     } catch (erro) {
       const apiError = toApiError(erro)
