@@ -78,3 +78,31 @@ export const SIGN_UP_MUTATION: TypedDocumentNode<
     }
   }
 `
+
+export interface UpdateProfileMutationData {
+  updateProfile: AuthenticatedUser
+}
+
+export interface UpdateProfileMutationVariables {
+  input: { name: string }
+}
+
+/**
+ * Edicao do nome do proprio usuario.
+ *
+ * Devolver o usuario com o mesmo `id` faz o cache normalizado do Apollo
+ * atualizar `me` sozinho: o avatar do cabecalho e a tela de conta leem o
+ * nome novo sem refetch e sem `writeQuery` manual.
+ */
+export const UPDATE_PROFILE_MUTATION: TypedDocumentNode<
+  UpdateProfileMutationData,
+  UpdateProfileMutationVariables
+> = gql`
+  mutation UpdateProfile($input: UpdateProfileInput!) {
+    updateProfile(input: $input) {
+      id
+      name
+      email
+    }
+  }
+`
