@@ -53,8 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const aplicarSessao = useCallback(
-    (novoToken: string, usuario: AuthenticatedUser) => {
-      storeToken(novoToken)
+    (novoToken: string, usuario: AuthenticatedUser, lembrar: boolean) => {
+      storeToken(novoToken, lembrar)
       setToken(novoToken)
 
       // Grava o usuario no cache: como `me` acabou de deixar de ser ignorada,
@@ -66,14 +66,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = useCallback(
     async (input: SignInInput) => {
-      const resultado = await executarSignIn({ variables: { input } })
+      // `remember` e decisao da interface, nao dado da API: o SignInInput do
+      // back-end nao tem esse campo, e envia-lo faria a operacao ser recusada.
+      const { remember, ...credenciais } = input
+
+      const resultado = await executarSignIn({
+        variables: { input: credenciais },
+      })
       const payload = resultado.data?.signIn
 
       if (!payload) {
         throw new Error('Resposta inesperada do servidor')
       }
 
-      aplicarSessao(payload.token, payload.user)
+      aplicarSessao(payload.token, payload.user, remember)
     },
     [executarSignIn, aplicarSessao],
   )
@@ -87,7 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error('Resposta inesperada do servidor')
       }
 
-      aplicarSessao(payload.token, payload.user)
+      // Quem acabou de criar a conta espera continuar dentro dela.
+      aplicarSessao(payload.token, payload.user, true)
     },
     [executarSignUp, aplicarSessao],
   )

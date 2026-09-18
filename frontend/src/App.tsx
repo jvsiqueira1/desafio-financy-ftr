@@ -1,5 +1,6 @@
 import { ApolloProvider } from '@apollo/client/react'
 
+import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/features/auth/auth-provider'
 import { apolloClient } from '@/lib/apollo'
 import { AppRoutes } from '@/routes/app-routes'
@@ -13,6 +14,7 @@ export function App() {
     <ApolloProvider client={apolloClient}>
       <AuthProvider>
         <AppRoutes />
+        <Toaster position="top-right" />
       </AuthProvider>
     </ApolloProvider>
   )

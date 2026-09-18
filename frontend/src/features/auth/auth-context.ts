@@ -5,6 +5,8 @@ import type { AuthenticatedUser } from '@/graphql/session'
 export interface SignInInput {
   email: string
   password: string
+  /** Mantem a sessao depois de fechar o navegador. */
+  remember: boolean
 }
 
 export interface SignUpInput {
