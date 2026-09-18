@@ -4,8 +4,8 @@ import { Input } from '@/components/ui/input'
 import { formatCentsForInput, parseCurrencyToCents } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
-/** O mesmo teto aceito pela API: R$ 999.999.999,99. */
-const LIMITE_EM_CENTAVOS = 99_999_999_999
+/** O mesmo teto aceito pela API: R$ 10.000.000,00. */
+const LIMITE_EM_CENTAVOS = 1_000_000_000
 
 interface CurrencyInputProps
   extends Omit<

@@ -17,7 +17,7 @@ const amountSchema = z
   .number()
   .int('O valor deve ser informado em centavos, sem casas decimais')
   .positive('O valor deve ser maior que zero')
-  .max(99999999999, 'Valor acima do limite suportado')
+  .max(1_000_000_000, 'O valor deve ser de no máximo R$ 10.000.000,00')
 
 const typeSchema = z.enum(['INCOME', 'EXPENSE'], {
   error: 'O tipo deve ser INCOME ou EXPENSE',

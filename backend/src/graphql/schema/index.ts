@@ -1,5 +1,6 @@
 import { baseTypeDefs } from './base.js'
 import { categoryTypeDefs } from './category.js'
+import { dashboardTypeDefs } from './dashboard.js'
 import { transactionTypeDefs } from './transaction.js'
 import { userTypeDefs } from './user.js'
 
@@ -12,4 +13,5 @@ export const typeDefs = [
   userTypeDefs,
   categoryTypeDefs,
   transactionTypeDefs,
+  dashboardTypeDefs,
 ]
