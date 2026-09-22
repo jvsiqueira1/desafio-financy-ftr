@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* Qual versao de JavaScript o compilador gera */
+    "target": "ES2022",
+    "lib": ["ES2023"],
+
+    /* Sistema de modulos: ESM nativo do Node.
+       Exige extensao .js nos imports relativos. */
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* Entrada e saida do build */
+    "rootDir": "src",
+    "outDir": "dist",
+
+    /* Checagens de tipo: quanto mais rigoroso, menos bug em runtime */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Interoperabilidade e consistencia */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+
+    /* Facilita debug do codigo compilado */
+    "sourceMap": true,
+    "declaration": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

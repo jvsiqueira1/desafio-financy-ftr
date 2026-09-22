@@ -31,8 +31,66 @@ isoladas por usuário.
 
 ## Como rodar
 
-> Em construção. As instruções completas de instalação, variáveis de ambiente,
-> migrations e execução serão documentadas ao final do desenvolvimento.
+### Pré-requisitos
+
+- Node.js 20 ou superior
+- npm
+
+### 1. Back-end
+
+```bash
+cd backend
+npm install
+cp .env.example .env
+```
+
+Gere a `JWT_SECRET` e grave no `.env`:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Crie o banco SQLite e gere o Prisma Client:
+
+```bash
+npx prisma migrate deploy
+npx prisma generate
+```
+
+Suba a API:
+
+```bash
+npm run dev
+```
+
+Sobe em `http://localhost:3333` — GraphQL em `/graphql` e verificação de saúde
+em `/health`. O `prisma/dev.db` é criado pelo migrate e não entra no repositório.
+
+### 2. Front-end
+
+Em outro terminal:
+
+```bash
+cd frontend
+npm install
+cp .env.example .env
+npm run dev
+```
+
+O `.env.example` já aponta `VITE_BACKEND_URL` para `http://localhost:3333/graphql`,
+o padrão do back-end. A aplicação abre em `http://localhost:5173` — cadastre um
+usuário para começar.
+
+### Scripts
+
+| Script              | Back-end                   | Front-end                    |
+| ------------------- | -------------------------- | ---------------------------- |
+| `npm run dev`       | API com recarga automática | Vite com recarga automática  |
+| `npm run build`     | Compila para `dist/`       | Type-check + bundle estático |
+| `npm run start`     | Roda a compilação          | —                            |
+| `npm run preview`   | —                          | Serve o bundle de produção   |
+| `npm run typecheck` | TypeScript sem emitir      | TypeScript sem emitir        |
+| `npm run lint`      | Biome                      | Biome                        |
 
 ## Design
 
