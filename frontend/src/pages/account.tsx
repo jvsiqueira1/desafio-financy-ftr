@@ -1,15 +1,14 @@
 import { useMutation } from '@apollo/client/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LogOut } from 'lucide-react'
+import { LogOut, Mail, User } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { FormField } from '@/components/form-field'
-import { PageHeader } from '@/components/page-header'
+import { IconInput } from '@/components/icon-input'
 import { PageShell } from '@/components/page-shell'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/features/auth/use-auth'
 import { UPDATE_PROFILE_MUTATION } from '@/graphql/session'
@@ -64,53 +63,74 @@ export function AccountPage() {
 
   return (
     <PageShell>
-      <div className="space-y-8">
-        <PageHeader
-          description="Gerencie os dados da sua conta"
-          title="Conta"
-        />
-
-        <div className="mx-auto max-w-md space-y-6 rounded-xl border border-border bg-card p-8">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <div
-              aria-hidden
-              className="flex size-16 items-center justify-center rounded-full bg-gray-300 font-medium text-foreground text-xl"
-            >
-              {user ? getInitials(user.name) : ''}
-            </div>
-
-            <div>
-              <p className="font-semibold text-foreground text-xl">
-                {user?.name}
-              </p>
-              <p className="text-muted-foreground">{user?.email}</p>
-            </div>
+      <div className="mx-auto max-w-md space-y-8 rounded-xl border border-border bg-card p-8">
+        <div className="flex flex-col items-center gap-6 text-center">
+          <div
+            aria-hidden
+            className="flex size-16 items-center justify-center rounded-full bg-gray-300 font-medium text-foreground text-xl"
+          >
+            {user ? getInitials(user.name) : ''}
           </div>
 
-          <form
-            className="space-y-6"
-            noValidate
-            onSubmit={handleSubmit(aoEnviar)}
+          <div>
+            <p className="font-semibold text-foreground text-xl">
+              {user?.name}
+            </p>
+            <p className="text-muted-foreground">{user?.email}</p>
+          </div>
+        </div>
+
+        <Separator />
+
+        <form
+          className="space-y-4"
+          id="profile-form"
+          noValidate
+          onSubmit={handleSubmit(aoEnviar)}
+        >
+          <FormField
+            error={errors.name?.message}
+            id="profile-name"
+            label="Nome completo"
           >
-            <FormField
-              error={errors.name?.message}
+            <IconInput
+              aria-invalid={Boolean(errors.name)}
+              autoComplete="name"
+              icon={User}
               id="profile-name"
-              label="Nome completo"
-            >
-              <Input
-                aria-invalid={Boolean(errors.name)}
-                autoComplete="name"
-                id="profile-name"
-                {...register('name')}
-              />
-            </FormField>
+              {...register('name')}
+            />
+          </FormField>
 
-            <Button className="w-full" disabled={isSubmitting} type="submit">
-              {isSubmitting ? 'Salvando…' : 'Salvar'}
-            </Button>
-          </form>
+          {/* O e-mail identifica a conta e nao e editavel: vai como somente
+              leitura, e nao desabilitado, para continuar selecionavel e
+              legivel por leitores de tela. */}
+          <FormField
+            hint="O e-mail não pode ser alterado"
+            id="profile-email"
+            label="E-mail"
+          >
+            <IconInput
+              className="text-gray-400"
+              icon={Mail}
+              id="profile-email"
+              readOnly
+              value={user?.email ?? ''}
+            />
+          </FormField>
+        </form>
 
-          <Separator />
+        {/* Os dois botoes formam um bloco so no layout, mas apenas o primeiro
+            pertence ao formulario — dai a associacao pelo atributo `form`. */}
+        <div className="space-y-4">
+          <Button
+            className="w-full"
+            disabled={isSubmitting}
+            form="profile-form"
+            type="submit"
+          >
+            {isSubmitting ? 'Salvando…' : 'Salvar alterações'}
+          </Button>
 
           <Button
             className="w-full"
