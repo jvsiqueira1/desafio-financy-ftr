@@ -21,6 +21,19 @@ isoladas por usuário.
 - Vite
 - Apollo Client (GraphQL)
 
+## Acessibilidade
+
+Auditada com Lighthouse e axe-core em todas as telas, logado e deslogado,
+incluindo os dialogs abertos e com erros de validação: **100 no Lighthouse**
+e nenhuma violação WCAG 2.1 AA no axe.
+
+- Componentes do Radix (foco, teclado e ARIA nos dialogs, selects e menus)
+- Todo campo tem rótulo, e dicas e erros são ligados a ele por
+  `aria-describedby`; erros também são anunciados como `role="alert"`
+- Botões só com ícone têm nome acessível, e o de mostrar senha usa `aria-pressed`
+- Contraste mínimo de 4,5:1 nos textos e área de toque de 24×24 px
+- Um `h1` por página (oculto visualmente quando o layout não tem título)
+
 ## Estrutura do repositório
 
 ```text

@@ -19,7 +19,9 @@ export function PasswordInput(props: PasswordInputProps) {
         <button
           aria-label={visivel ? 'Ocultar senha' : 'Mostrar senha'}
           aria-pressed={visivel}
-          className="text-gray-700 transition-colors hover:text-foreground"
+          // Area de toque de 24x24 (minimo do WCAG 2.2) em volta do icone de
+          // 16px; a margem negativa mantem o icone na posicao do layout.
+          className="-mr-1 flex size-6 items-center justify-center rounded text-gray-700 transition-colors hover:text-foreground"
           onClick={() => setVisivel((atual) => !atual)}
           // Dentro de um <form>, todo botao e "submit" por padrao: sem isto,
           // mostrar a senha enviaria o formulario.
