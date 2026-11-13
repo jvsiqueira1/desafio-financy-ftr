@@ -1,7 +1,7 @@
 import { FullScreenLoader } from '@/components/full-screen-loader'
 import { useAuth } from '@/features/auth/use-auth'
-import { DashboardPage } from '@/pages/dashboard'
-import { SignInPage } from '@/pages/sign-in'
+
+import { DashboardPage, SignInPage } from './lazy-pages'
 
 /**
  * A raiz exibe o login quando nao ha sessao e o dashboard quando ha.
