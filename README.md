@@ -36,6 +36,13 @@ isoladas por usuário.
 - Node.js 20 ou superior
 - npm
 
+Na raiz, instale as ferramentas de qualidade (ativa os hooks de Git que
+formatam o código e validam as mensagens de commit):
+
+```bash
+npm install
+```
+
 ### 1. Back-end
 
 ```bash
@@ -97,8 +104,17 @@ usuário para começar.
 Layout de referência (Figma):
 https://www.figma.com/design/9xSylqSSq2Fun4jsXdBrI8/Financy--Community-
 
+O [Style Guide](docs/style-guide.md) documenta como os tokens do Figma (cores,
+tipografia, raios e a paleta das categorias) viraram código e quais componentes
+já existem.
+
 ## Convenções de desenvolvimento
 
 - **Branches:** `main` (estável) · `develop` (integração) · `feature/*` (trabalho)
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/)
-  (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`)
+  (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`), validados pelo commitlint
+- **Hooks de Git** (Husky): o `pre-commit` roda o Biome nos arquivos alterados e
+  o `commit-msg` valida a mensagem
+
+Detalhes em [CONTRIBUTING.md](CONTRIBUTING.md). O histórico de versões está no
+[CHANGELOG.md](CHANGELOG.md).
