@@ -91,6 +91,16 @@ usuário para começar.
 | `npm run preview`   | —                          | Serve o bundle de produção   |
 | `npm run typecheck` | TypeScript sem emitir      | TypeScript sem emitir        |
 | `npm run lint`      | Biome                      | Biome                        |
+| `npm test`          | Testes de integração       | —                            |
+
+### Testes
+
+Os testes do back-end (`backend/test`) usam Vitest e passam pela camada GraphQL
+real: o token percorre o mesmo `createContext` de uma requisição, e as operações
+chegam ao Prisma. Rodam em um SQLite próprio (`prisma/test.db`), recriado a cada
+execução, então não tocam o banco de desenvolvimento. Cobrem cadastro, login,
+sessão, CRUD de categorias e transações, filtros, paginação e o isolamento entre
+usuários.
 
 ## Design
 
