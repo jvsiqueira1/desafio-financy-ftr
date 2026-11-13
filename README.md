@@ -91,7 +91,7 @@ usuário para começar.
 | `npm run preview`   | —                          | Serve o bundle de produção   |
 | `npm run typecheck` | TypeScript sem emitir      | TypeScript sem emitir        |
 | `npm run lint`      | Biome                      | Biome                        |
-| `npm test`          | Testes de integração       | —                            |
+| `npm test`          | Testes de integração       | Testes unitários e de tela   |
 
 ### Testes
 
@@ -101,6 +101,12 @@ chegam ao Prisma. Rodam em um SQLite próprio (`prisma/test.db`), recriado a cad
 execução, então não tocam o banco de desenvolvimento. Cobrem cadastro, login,
 sessão, CRUD de categorias e transações, filtros, paginação e o isolamento entre
 usuários.
+
+Os do front-end usam Vitest e Testing Library em jsdom, ao lado do código que
+testam (`*.test.ts(x)`). Cobrem os utilitários de formatação, período e
+armazenamento do token, os campos de valor e senha, e o fluxo de login com o
+Apollo simulado pelo `MockedProvider`: validação, sessão aberta, "lembrar-me" e
+erro da API.
 
 ## Design
 
