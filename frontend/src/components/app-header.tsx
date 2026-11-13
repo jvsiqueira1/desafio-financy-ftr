@@ -43,12 +43,15 @@ export function AppHeader() {
           ))}
         </nav>
 
+        {/* As iniciais sao decorativas: o nome anunciado e "Minha conta".
+            Um aria-label no link esconderia o texto visivel, e quem usa
+            comando de voz ("clicar em CT") nao encontraria o link. */}
         <NavLink
-          aria-label="Conta"
           className="flex size-9 items-center justify-center rounded-full bg-gray-300 font-medium text-foreground text-sm"
           to="/conta"
         >
-          {user ? getInitials(user.name) : ''}
+          <span aria-hidden>{user ? getInitials(user.name) : ''}</span>
+          <span className="sr-only">Minha conta</span>
         </NavLink>
       </div>
     </header>

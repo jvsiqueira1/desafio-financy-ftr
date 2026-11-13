@@ -73,9 +73,9 @@ export function AccountPage() {
           </div>
 
           <div>
-            <p className="font-semibold text-foreground text-xl">
+            <h1 className="font-semibold text-foreground text-xl">
               {user?.name}
-            </p>
+            </h1>
             <p className="text-muted-foreground">{user?.email}</p>
           </div>
         </div>
@@ -111,7 +111,7 @@ export function AccountPage() {
             label="E-mail"
           >
             <IconInput
-              className="text-gray-400"
+              className="text-gray-500"
               icon={Mail}
               id="profile-email"
               readOnly

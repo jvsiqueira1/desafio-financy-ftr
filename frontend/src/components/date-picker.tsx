@@ -36,7 +36,7 @@ export function DatePicker({
           aria-invalid={invalid}
           className={cn(
             'flex h-12 w-full items-center rounded-lg border border-input bg-card px-3.25 text-left text-base outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive',
-            value ? 'text-foreground' : 'text-gray-400',
+            value ? 'text-foreground' : 'text-gray-500',
           )}
           id={id}
           type="button"
