@@ -21,6 +21,19 @@ isoladas por usuário.
 - Vite
 - Apollo Client (GraphQL)
 
+## Acessibilidade
+
+Auditada com Lighthouse e axe-core em todas as telas, logado e deslogado,
+incluindo os dialogs abertos e com erros de validação: **100 no Lighthouse**
+e nenhuma violação WCAG 2.1 AA no axe.
+
+- Componentes do Radix (foco, teclado e ARIA nos dialogs, selects e menus)
+- Todo campo tem rótulo, e dicas e erros são ligados a ele por
+  `aria-describedby`; erros também são anunciados como `role="alert"`
+- Botões só com ícone têm nome acessível, e o de mostrar senha usa `aria-pressed`
+- Contraste mínimo de 4,5:1 nos textos e área de toque de 24×24 px
+- Um `h1` por página (oculto visualmente quando o layout não tem título)
+
 ## Estrutura do repositório
 
 ```text
@@ -35,6 +48,13 @@ isoladas por usuário.
 
 - Node.js 20 ou superior
 - npm
+
+Na raiz, instale as ferramentas de qualidade (ativa os hooks de Git que
+formatam o código e validam as mensagens de commit):
+
+```bash
+npm install
+```
 
 ### 1. Back-end
 
@@ -91,14 +111,69 @@ usuário para começar.
 | `npm run preview`   | —                          | Serve o bundle de produção   |
 | `npm run typecheck` | TypeScript sem emitir      | TypeScript sem emitir        |
 | `npm run lint`      | Biome                      | Biome                        |
+| `npm test`          | Testes de integração       | Testes unitários e de tela   |
+
+### Testes
+
+Os testes do back-end (`backend/test`) usam Vitest e passam pela camada GraphQL
+real: o token percorre o mesmo `createContext` de uma requisição, e as operações
+chegam ao Prisma. Rodam em um SQLite próprio (`prisma/test.db`), recriado a cada
+execução, então não tocam o banco de desenvolvimento. Cobrem cadastro, login,
+sessão, CRUD de categorias e transações, filtros, paginação e o isolamento entre
+usuários.
+
+Os do front-end usam Vitest e Testing Library em jsdom, ao lado do código que
+testam (`*.test.ts(x)`). Cobrem os utilitários de formatação, período e
+armazenamento do token, os campos de valor e senha, e o fluxo de login com o
+Apollo simulado pelo `MockedProvider`: validação, sessão aberta, "lembrar-me" e
+erro da API.
+
+## Segurança
+
+### Back-end
+- **Isolamento por usuário:** o `userId` vem sempre do token, nunca do cliente.
+  Recurso de outro dono responde `NOT_FOUND`, sem confirmar que ele existe.
+- **Senhas:** hash com argon2id. O login gasta o mesmo tempo para um e-mail
+  inexistente e responde a mesma mensagem genérica, para não permitir
+  enumerar contas.
+- **Headers HTTP** (`helmet`): `X-Content-Type-Options`, `X-Frame-Options`,
+  `Strict-Transport-Security`, `Referrer-Policy` e, em produção, uma CSP que
+  bloqueia tudo (a API só devolve JSON). O `X-Powered-By` é removido.
+- **Rate limiting** (`express-rate-limit`): 300 requisições a cada 15 min por IP
+  no `/graphql` e 20 tentativas de login/cadastro no mesmo intervalo. O excesso
+  recebe `429` com o código `TOO_MANY_REQUESTS`, que o front-end exibe.
+- **GraphQL:** consultas com mais de 8 níveis de aninhamento são recusadas
+  antes de executar. Em produção, introspection e o Sandbox ficam desligados.
+- **Corpo da requisição** limitado a 100 kB.
+
+### Front-end
+- **Content Security Policy** injetada no `index.html` do build: só roda script
+  da própria origem e só faz requisições para a API (`VITE_BACKEND_URL`). Fica
+  fora do `npm run dev` porque o React Refresh depende de um script inline.
+- **XSS:** o React escapa todo texto renderizado e o projeto não usa
+  `dangerouslySetInnerHTML`, por isso não há HTML do usuário a sanitizar com
+  DOMPurify. Os dados são validados com Zod nos dois lados.
+- **CSRF:** não se aplica. O token vai no header `Authorization`, não em
+  cookie, então o navegador não o envia sozinho em requisições de outros sites.
+- **SRI:** não se aplica. Nenhum recurso é carregado de CDN; fontes e
+  bibliotecas saem do próprio bundle.
 
 ## Design
 
 Layout de referência (Figma):
 https://www.figma.com/design/9xSylqSSq2Fun4jsXdBrI8/Financy--Community-
 
+O [Style Guide](docs/style-guide.md) documenta como os tokens do Figma (cores,
+tipografia, raios e a paleta das categorias) viraram código e quais componentes
+já existem.
+
 ## Convenções de desenvolvimento
 
 - **Branches:** `main` (estável) · `develop` (integração) · `feature/*` (trabalho)
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/)
-  (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`)
+  (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`), validados pelo commitlint
+- **Hooks de Git** (Husky): o `pre-commit` roda o Biome nos arquivos alterados e
+  o `commit-msg` valida a mensagem
+
+Detalhes em [CONTRIBUTING.md](CONTRIBUTING.md). O histórico de versões está no
+[CHANGELOG.md](CHANGELOG.md).

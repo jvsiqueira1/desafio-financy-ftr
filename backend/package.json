@@ -11,10 +11,12 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "typecheck": "tsc --noEmit",
-    "lint": "biome check src",
-    "lint:fix": "biome check --write src",
-    "format": "biome format --write src"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit && tsc -p test/tsconfig.json",
+    "lint": "biome check src test vitest.config.ts",
+    "lint:fix": "biome check --write src test vitest.config.ts",
+    "format": "biome format --write src test vitest.config.ts"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",
@@ -24,7 +26,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.7.4",
     "graphql": "^16.14.2",
+    "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "zod": "^4.6.5"
   },
@@ -36,6 +40,7 @@
     "@types/node": "^24.13.5",
     "prisma": "^6.19.3",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   }
 }

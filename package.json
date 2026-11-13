@@ -1,0 +1,23 @@
+{
+  "name": "financy",
+  "private": true,
+  "description": "Ferramentas de qualidade compartilhadas pelo back-end e pelo front-end",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,json,css}": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.14",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0"
+  }
+}

@@ -43,6 +43,9 @@ export function DashboardPage() {
 
   return (
     <PageShell>
+      {/* O layout nao exibe titulo, mas leitores de tela navegam pelos
+          cabecalhos: o h1 fica disponivel so para eles. */}
+      <h1 className="sr-only">Dashboard</h1>
       <div className="space-y-6">
         {resumo.error && !dados && (
           <div className="flex items-center justify-between rounded-xl border border-border bg-card px-6 py-4">
